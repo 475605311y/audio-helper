@@ -51,3 +51,40 @@ class ExtractData(BaseModel):
     city_b: str
     address_b: str
     category: str
+
+
+class SearchRequest(BaseModel):
+    city_a: str = Field(min_length=1)
+    address_a: str = Field(min_length=1)
+    city_b: str = Field(min_length=1)
+    address_b: str = Field(min_length=1)
+    category: str = Field(min_length=1)
+
+
+class Midpoint(BaseModel):
+    longitude: float
+    latitude: float
+
+
+class PoiItem(BaseModel):
+    name: str
+    address: str
+    distance_to_midpoint_m: float
+
+
+class SearchData(BaseModel):
+    search_id: str = Field(examples=["srch_0e9b8a77-2c3d-4e5f-a617-89ab0c1d2e3f"])
+    midpoint: Midpoint
+    pois: list[PoiItem]
+
+
+class FinalizeRequest(BaseModel):
+    search_id: str = Field(min_length=1)
+
+
+class FinalizeData(BaseModel):
+    reply_text: str
+    audio_url: str | None = Field(
+        examples=["http://localhost:8003/audio/tts_5a6b7c8d-9e0f-41a2-b3c4-d5e6f7081920"]
+    )
+    warning: str | None = None

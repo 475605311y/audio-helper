@@ -102,3 +102,24 @@ button:disabled {
 .status.error {
   color: #b42318;
 }
+
+.hint-block {
+  margin: 0.75rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.results {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.results ul,
+.results ol {
+  padding-left: 1.2rem;
+}
+
+.results li {
+  margin: 0.4rem 0;
+}
