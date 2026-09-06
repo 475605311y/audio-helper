@@ -1,37 +1,85 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getHealth } from "./api.js";
+import RecordButton from "./components/RecordButton.jsx";
+import RecordingPreview from "./components/RecordingPreview.jsx";
 
 export default function App() {
-  const [message, setMessage] = useState("尚未检查后端。");
-  const [busy, setBusy] = useState(false);
+  const [city, setCity] = useState("杭州");
+  const [healthMessage, setHealthMessage] = useState("尚未检查后端。");
+  const [healthBusy, setHealthBusy] = useState(false);
+  const [recordError, setRecordError] = useState("");
+  const [recording, setRecording] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (recording?.url) {
+        URL.revokeObjectURL(recording.url);
+      }
+    };
+  }, [recording]);
 
   async function checkHealth() {
-    setBusy(true);
-    setMessage("正在检查后端…");
+    setHealthBusy(true);
+    setHealthMessage("正在检查后端…");
     try {
       const { data } = await getHealth();
-      setMessage(
+      setHealthMessage(
         `健康检查成功。status=${data.data.status}，request_id=${data.request_id}`,
       );
     } catch (error) {
       const detail = error.response
         ? `HTTP ${error.response.status}`
         : error.message;
-      setMessage(`健康检查失败：${detail}。请确认后端已在 8003 端口启动。`);
+      setHealthMessage(`健康检查失败：${detail}。请确认后端已在 8003 端口启动。`);
     } finally {
-      setBusy(false);
+      setHealthBusy(false);
     }
+  }
+
+  function handleRecordingReady({ blob, durationMs, mimeType }) {
+    setRecording((current) => {
+      if (current?.url) {
+        URL.revokeObjectURL(current.url);
+      }
+      return {
+        blob,
+        durationMs,
+        mimeType,
+        url: URL.createObjectURL(blob),
+      };
+    });
+    setRecordError("");
   }
 
   return (
     <main className="page">
       <h1>语音约碰面地点</h1>
-      <p>第一版骨架页。录音和其他业务接口尚未接入。</p>
-      <p>后端地址：http://localhost:8003</p>
-      <button type="button" onClick={checkHealth} disabled={busy}>
-        {busy ? "检查中…" : "检查后端健康状态"}
-      </button>
-      <p className="status">{message}</p>
+      <p>按住按钮录音。本轮只做本地录音，不上传、不识别、不找店。</p>
+
+      <label className="city-field">
+        城市
+        <input
+          value={city}
+          onChange={(event) => setCity(event.target.value)}
+          autoComplete="off"
+        />
+      </label>
+
+      <RecordButton
+        onRecordingReady={handleRecordingReady}
+        onError={setRecordError}
+      />
+      {recordError ? <p className="status error">{recordError}</p> : null}
+
+      <RecordingPreview recording={recording} />
+
+      <section className="health">
+        <p>后端地址：http://localhost:8003</p>
+        <button type="button" onClick={checkHealth} disabled={healthBusy}>
+          {healthBusy ? "检查中…" : "检查后端健康状态"}
+        </button>
+        <p className="status">{healthMessage}</p>
+      </section>
     </main>
   );
 }

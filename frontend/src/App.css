@@ -17,8 +17,32 @@ body {
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
-h1 {
+h1,
+h2 {
   margin-top: 0;
+}
+
+.city-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1.25rem 0;
+  font-weight: 600;
+}
+
+.city-field input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.record-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 button {
@@ -36,7 +60,45 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.record-button {
+  min-width: 12rem;
+  min-height: 3rem;
+  user-select: none;
+  touch-action: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.record-button.recording {
+  background: #dc2626;
+}
+
+.preview {
+  margin-top: 1.5rem;
+}
+
+.preview audio {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.hint {
+  margin-left: 0.5rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.health {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e5e7eb;
+}
+
 .status {
   margin-top: 1rem;
   line-height: 1.5;
+}
+
+.status.error {
+  color: #b42318;
 }
