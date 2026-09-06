@@ -21,7 +21,7 @@ export default function RecordingPreview({ recording }) {
         <a href={recording.url} download={fileName}>
           下载录音文件
         </a>
-        <span className="hint">（临时入口，供后续单独测试上传接口）</span>
+        <span className="hint">（本地录音备份，查找时只会上传这一份）</span>
       </p>
     </section>
   );

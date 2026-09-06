@@ -35,8 +35,11 @@ def _request_id(request: Request) -> str:
 
 
 def _stage_from_path(path: str) -> str:
-    name = path.rstrip("/").rsplit("/", 1)[-1]
-    if name in {"upload", "asr", "extract"}:
+    parts = path.rstrip("/").split("/")
+    if len(parts) >= 2 and parts[-2] == "audio":
+        return "audio"
+    name = parts[-1]
+    if name in {"upload", "asr", "extract", "search", "finalize"}:
         return name
     return "unknown"
 
