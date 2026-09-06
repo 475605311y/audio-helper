@@ -35,8 +35,9 @@ def _request_id(request: Request) -> str:
 
 
 def _stage_from_path(path: str) -> str:
-    if path.rstrip("/").endswith("/upload"):
-        return "upload"
+    name = path.rstrip("/").rsplit("/", 1)[-1]
+    if name in {"upload", "asr", "extract"}:
+        return name
     return "unknown"
 
 
